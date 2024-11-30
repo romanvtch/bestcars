@@ -1,0 +1,540 @@
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $phone = $_POST["phone"];
+
+    $chatId = "";
+    $token = "";
+    $message = "Номер телефону: $phone";
+
+    $telegramApiUrl = "https://api.telegram.org/bot$token/sendMessage";
+
+    $postData = array(
+        "chat_id" => $chatId,
+        "text" => $message
+    );
+
+    $options = array(
+        "http" => array(
+            "header" => "Content-type: application/x-www-form-urlencoded\r\n",
+            "method" => "POST",
+            "content" => http_build_query($postData)
+        )
+    );
+
+    $context = stream_context_create($options);
+    $result = file_get_contents($telegramApiUrl, false, $context);
+
+    if ($result === false) {
+        echo "Error sending message.";
+    } else {
+        header("Location: ./thank.php");
+        exit;
+    }
+}
+?> 
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/styles/style.css">
+    <!-- Box Icon -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <!-- Aos -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="./assets/img/fav.ico" type="image/x-icon">
+
+    <!-- SEO Optimization -->
+    <title>Bestcars - Трансфери Львів-Варшава, Львів-Польща, Київ-Львів та інші напрямки</title>
+    <meta name="description"
+        content="Bestcars надає трансфери між Львовом, Варшавою, Києвом та іншими містами України та Польщі. Забезпечуємо комфортні поїздки для бізнесу та подорожей.">
+    <meta name="keywords"
+        content="трансфери Львів-Варшава, трансфери Львів-Польща, трансфери Київ-Львів, трансфери Україна-Польща, прокат авто з водієм Львів, комфортні поїздки, замовити трансфер з України">
+    <meta name="author" content="Bestcars">
+
+    <!-- Open Graph Tags for Social Media -->
+    <meta property="og:title" content="Bestcars - Трансфери Львів-Варшава, Львів-Польща, Київ-Львів та інші напрямки">
+    <meta property="og:description"
+        content="Bestcars пропонує трансфери між містами Львів, Варшава, Київ, Польща та Україна, забезпечуючи комфорт і надійність.">
+    <meta property="og:image" content="./assets/img/hero/hero-car.webp">
+    <meta property="og:url" content="https://bestcars.uno/">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bestcars - Трансфери Львів-Варшава, Львів-Польща, Київ-Львів та інші напрямки">
+    <meta name="twitter:description"
+        content="Комфортні трансфери з Bestcars – Львів, Варшава, Київ, Польща, Україна, з професійними водіями та комфортними авто.">
+    <meta name="twitter:image" content="./assets/img/hero/hero-car.webp">
+
+    <!-- Canonical Link -->
+    <link rel="canonical" href="https://bestcars.uno/">
+
+    <!-- Structured Data Markup (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Bestcars",
+        "description": "Bestcars надає трансфери по Україні та за кордон, зокрема маршрути Львів-Варшава, Львів-Польща, Київ-Львів з комфортними авто та досвідченими водіями.",
+        "image": "https://bestcars.uno/assets/img/hero/hero-car.webp",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Львів, Київ, Варшава, Польща, Україна"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+380677805192",
+            "contactType": "customer service"
+        },
+        "areaServed": ["Lviv", "Kyiv", "Warsaw", "Poland", "Ukraine"],
+        "offers": [
+            {
+                "@type": "Offer",
+                "name": "Трансфери Львів-Варшава",
+                "description": "Трансфер між Львовом та Варшавою з комфортним авто та професійним водієм.",
+                "areaServed": "Львів, Варшава"
+            },
+            {
+                "@type": "Offer",
+                "name": "Трансфери Львів-Київ",
+                "description": "Комфортний трансфер між Львовом та Києвом для бізнесу та подорожей.",
+                "areaServed": "Львів, Київ"
+            },
+            {
+                "@type": "Offer",
+                "name": "Трансфери Україна-Польща",
+                "description": "Надійний трансфер між містами України та Польщі, включаючи Львів та Варшаву.",
+                "areaServed": "Україна, Польща"
+            }
+        ],
+        "url": "https://bestcars.uno/"
+    }
+    </script>
+</head>
+
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="./" class="header-logo">
+                    <img src="./assets/img/logo.svg" alt="лого">
+                </a>
+                <nav class="header-nav">
+                    <a href="./cars.html" class="nav-link" aria-label="перейти на сторінку авто">Авто</a>
+                    <a href="./service.html" class="nav-link" aria-label="перейти на сторінку послуги">Послуги</a>
+                    <a href="#feed" class="nav-link" aria-label="перейти на секції відгуки">Відгуки</a>
+                    <a href="#contact" class="nav-link" aria-label="перейти на секції контакти">Контакти</a>
+                </nav>
+                <div class="header-action">
+                    <a href="https://www.instagram.com/p/CkGy6cUDPeM/?igsh=MXI2bDVxejg3MnB6cQ==" aria-label="наша інстаграм сторінку"><i class='bx bxl-instagram'></i></a>
+                    <a href="tel:+380677805192" aria-label="наш номер телефону"><i class='bx bx-phone-call'></i></a>
+
+                    <div class="menu-icon">
+                        <div class="line1"></div>
+                        <div class="line2"></div>
+                        <div class="line3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-info" data-aos="zoom-in">
+                        <h1>Преміум Оренда<br> трансферів</h1>
+                        <p>Орендуйте преміум авто з водієм для комфортних поїздок по
+                            Україні та за кордон. Ідеально для бізнесу, трансферів і подій.</p>
+                    </div>
+                    <div class="hero-img" data-aos="zoom-in">
+                        <img src="./assets/img/hero/hero-car.webp" alt="машина">
+                    </div>
+                </div>
+
+                <form action="" method="POST" class="hero-form" data-aos="fade-up">
+                    <input type="tel" placeholder="Ваш номер телефону..">
+                    <button type="submit" class="form-button">
+                        <i class="bx bx-phone-call"></i>
+                    </button>
+                </form>
+                <p class="form-notice" data-aos="fade-up">Залишіть свій номер</p>
+            </div>
+        </section>
+
+        <!-- Brand -->
+        <section class="brand">
+            <div class="container">
+                <div class="brand-content">
+                    <div class="brand-list">
+                        <img src="./assets/img/brand/audi.webp" alt="audi">
+                        <img src="./assets/img/brand/bmw.webp" alt="bmw">
+                        <img src="./assets/img/brand/porsche.webp" alt="porsche">
+                        <img src="./assets/img/brand/mercdes.webp" alt="mercedes">
+                        <img src="./assets/img/brand/lexus.webp" alt="lexus">
+                        <img src="./assets/img/brand/infinity.webp" alt="infinity">
+                        <img src="./assets/img/brand/toyota.webp" alt="toyota">
+                        <img src="./assets/img/brand/volvo.webp" alt="volvo">
+                        <img src="./assets/img/brand/maserati.webp" alt="maserati">
+                    </div>
+                    <div class="brand-list">
+                        <img src="./assets/img/brand/audi.webp" alt="audi">
+                        <img src="./assets/img/brand/bmw.webp" alt="bmw">
+                        <img src="./assets/img/brand/porsche.webp" alt="porsche">
+                        <img src="./assets/img/brand/mercdes.webp" alt="mercedes">
+                        <img src="./assets/img/brand/lexus.webp" alt="lexus">
+                        <img src="./assets/img/brand/infinity.webp" alt="infinity">
+                        <img src="./assets/img/brand/toyota.webp" alt="toyota">
+                        <img src="./assets/img/brand/volvo.webp" alt="volvo">
+                        <img src="./assets/img/brand/maserati.webp" alt="maserati">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order -->
+        <section class="order" data-aos="fade-up">
+            <div class="container">
+                <div class="head">
+                    <h3>Як це працює</h3>
+                    <h2>Пройдіть 3 кроки</h2>
+                </div>
+                <div class="order-content">
+                    <div class="order-step">
+                        <div><i class='bx bx-search'></i></div>
+                        <h3>Обирайте авто</h3>
+                        <p>Огляньте наш автопарк та оберіть оптимальне авто для ваших потреб.</p>
+                    </div>
+                    <div class="order-line"></div>
+                    <div class="order-step">
+                        <div><i class='bx bx-phone-call'></i></div>
+                        <h3>Зателефонуйте нам</h3>
+                        <p>Зв’яжіться з нами для отримання консультації та уточнення деталей.</p>
+                    </div>
+                    <div class="order-line"></div>
+                    <div class="order-step">
+                        <div><i class='bx bx-like'></i></div>
+                        <h3>Укладіть угоду</h3>
+                        <p>Завершіть оформлення угоди та отримайте автомобіль.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comfort -->
+        <section class="comfort">
+            <div class="container">
+                <div class="comfort-content" data-aos="fade-up">
+                    <div class="comfort-item">
+                        <div>
+                            <h4>Насолоджуйтесь преміальною якістю поїздок</h4>
+                            <p>Відчуйте комфорт та елегантність у кожній поїздці на наших сучасних авто. Преміум-сервіс
+                                забезпечує максимальний рівень зручності та стильності для подорожей.</p>
+                        </div>
+                        <img src="./assets/img/comfort/mercedes.webp" alt="mercedes">
+                    </div>
+                    <div class="comfort-item">
+                        <div>
+                            <h4>Розкіш та практичність для вашого комфорту</h4>
+                            <p>Ми пропонуємо авто з просторим салоном, передовими технологіями та відмінною керованістю.
+                                Ідеальний вибір для бізнес-зустрічей, трансферів та особливих подій.</p>
+                        </div>
+                        <img src="./assets/img/comfort/bmw.webp" alt="bmw">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Car -->
+        <section class="car" data-aos="fade-up">
+            <div class="container">
+                <div class="head">
+                    <h3>Доступні моделі</h3>
+                    <h2>Увесь наш автопарк</h2>
+                    <a href="./cars.html" aria-label="перейти на сторінку авто">Переглянути всі авто</a>
+                </div>
+                <div class="car-content">
+                    <article class="car-item">
+                        <div class="car-img"><img src="./assets/img/car/mercedes.webp" alt="merdes"></div>
+                        <div class="car-detail">
+                            <div class="detail-img">
+                                <img src="./assets/img/car/logo/mercedes.webp" alt="mercedes logo">
+                            </div>
+                            <div class="car-info">
+                                <h2>Mercedes-Benz S class</h2>
+                                <div class="info-content">
+                                    <p>Автомат</p>
+                                    <p>4 місця</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="car-item">
+                        <div class="car-img">
+                            <img src="./assets/img/car/bmw.webp" alt="bmw">
+                        </div>
+                        <div class="car-detail">
+                            <div class="detail-img">
+                                <img src="./assets/img/car/logo/bmw.webp" alt="bmw logo">
+                            </div>
+                            <div class="car-info">
+                                <h2>Bmw x5 Xdrive</h2>
+                                <div class="info-content">
+                                    <p>Автомат</p>
+                                    <p>4 місця</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="car-item">
+                        <div class="car-img">
+                            <img src="./assets/img/car/mercedesv.webp" alt="merdes">
+                        </div>
+                        <div class="car-detail">
+                            <div class="detail-img">
+                                <img src="./assets/img/car/logo/mercedes.webp" alt="mercedesv logo">
+                            </div>
+                            <div class="car-info">
+                                <h2>Mercedes-Benz V class</h2>
+                                <div class="info-content">
+                                    <p>Автомат</p>
+                                    <p>7 місць</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="car-item">
+                        <div class="car-img">
+                            <img src="./assets/img/car/audi.webp" alt="audi">
+                        </div>
+                        <div class="car-detail">
+                            <div class="detail-img">
+                                <img src="./assets/img/car/logo/audi.webp" alt="audi logo">
+                            </div>
+                            <div class="car-info">
+                                <h2>Audi A6 Quattro</h2>
+                                <div class="info-content">
+                                    <p>Автомат</p>
+                                    <p>4 місць</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="car-item">
+                        <div class="car-img">
+                            <img src="./assets/img/car/vw.webp" alt="vw">
+                        </div>
+                        <div class="car-detail">
+                            <div class="detail-img">
+                                <img src="./assets/img/car/logo/vw.webp" alt="vw logo">
+                            </div>
+                            <div class="car-info">
+                                <h2>Volkswagen Passat B8</h2>
+                                <div class="info-content">
+                                    <p>Автомат</p>
+                                    <p>4 місць</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="car-item">
+                        <div class="car-img">
+                            <img src="./assets/img/car/porsche.webp" alt="porsche">
+                        </div>
+                        <div class="car-detail">
+                            <div class="detail-img">
+                                <img src="./assets/img/car/logo/porsche.webp" alt="porsche logo">
+                            </div>
+                            <div class="car-info">
+                                <h2>Porsche Cayenne</h2>
+                                <div class="info-content">
+                                    <p>Автомат</p>
+                                    <p>4 місць</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feed -->
+        <section class="feed" id="feed" data-aos="fade-up">
+            <div class="container">
+                <div class="head">
+                    <h3>Що про нас думають</h3>
+                    <h2>Наші відгуки</h2>
+                </div>
+                <swiper-container class="mySwiper feed-content" space-between="24" pagination="false"
+                    slides-per-view="3" keyboard="true" mousewheel="true" autoplay="true" autoplay-delay="3000">
+                    <swiper-slide class="feed-item">
+                        <div class="feed-head">
+                            <img src="./assets/img/feed/2.webp" alt="Фото відгуку">
+                            <h3 class="feed-name">Марія Б.</h3>
+                        </div>
+                        <div class="feed-star">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <p>Чудовий сервіс! Водій приїхав вчасно, а автомобіль був у відмінному стані. Рекомендую
+                            Bestcars!</p>
+                    </swiper-slide>
+
+                    <swiper-slide class="feed-item">
+                        <div class="feed-head">
+                            <img src="./assets/img/feed/1.webp" alt="Фото відгуку">
+                            <h3 class="feed-name">Олександр Г.</h3>
+                        </div>
+                        <div class="feed-star">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <p>Найкращий трансфер! Досвідчений водій та комфортний автомобіль. Безумовно, рекомендую!</p>
+                    </swiper-slide>
+
+                    <swiper-slide class="feed-item">
+                        <div class="feed-head">
+                            <img src="./assets/img/feed/3.webp" alt="Фото відгуку">
+                            <h3 class="feed-name">Дмитро К.</h3>
+                        </div>
+                        <div class="feed-star">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <p>Якість на вищому рівні! Поїздка була комфортною і безпечною. Дякую Bestcars за відмінний
+                            сервіс!</p>
+                    </swiper-slide>
+
+                    <swiper-slide class="feed-item">
+                        <div class="feed-head">
+                            <img src="./assets/img/feed/4.webp" alt="Фото відгуку">
+                            <h3 class="feed-name">Олена Т.</h3>
+                        </div>
+                        <div class="feed-star">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <p>Дуже задоволена сервісом! Водій був ввічливим, а автомобіль чистим і сучасним. Рекомендую
+                            всім!</p>
+                    </swiper-slide>
+
+                    <swiper-slide class="feed-item">
+                        <div class="feed-head">
+                            <img src="./assets/img/feed/5.webp" alt="Фото відгуку">
+                            <h3 class="feed-name">Іван Я.</h3>
+                        </div>
+                        <div class="feed-star">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <p>Чудовий сервіс преміум класу! Все пройшло гладко, і я отримав відмінний досвід. Рекомендую
+                            Bestcars!</p>
+                    </swiper-slide>
+                </swiper-container>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="head">
+                    <h3>Зв'яжіться з нами</h3>
+                    <h2>Ми на зв'язку</h2>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="info-details" data-aos="fade-right">
+                            <div class="details-contact">
+                                <a href="tel:+380677805192" aria-label="наш номер телефону">+380677805192</a>
+                                <i class="bx bx-phone-call"></i>
+                            </div>
+                            <p>Зателефонуйте нам</p>
+                        </div>
+                        <div class="info-details" data-aos="fade-right">
+                            <div class="details-contact">
+                                <a href="mailto:bestcarsuno@gmail.com" aria-label="наша пошта">bestcarsuno@gmail.com</a>
+                                <i class='bx bx-envelope'></i>
+                            </div>
+                            <p>Напишіть нам</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <a href="./" class="footer-logo">
+                    <img src="./assets/img/logof.svg" alt="лого">
+                </a>
+                <div class="footer-action">
+                    <a href="https://www.instagram.com/p/CkGy6cUDPeM/?igsh=MXI2bDVxejg3MnB6cQ==" aria-label="наша інстаграм сторінку"><i class='bx bxl-instagram'></i></a>
+                    <a href="tel:+380677805192" aria-label="наш номер телефону"><i class='bx bx-phone-call'></i></a>
+                </div>
+            </div>
+            <p>© 2024 Права захищено.</p>
+        </div>
+
+    </footer>
+
+
+
+    <script src="./assets/scripts/app.js"></script>
+    <!-- Aos Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+    <!-- Slider -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+
+    <script>
+        const updateSlidesPerView = () => {
+            const w = window.innerWidth;
+            document.querySelector('.mySwiper')?.setAttribute('slides-per-view',
+                w > 1250 ? 3 : w > 760 ? 2 : 1
+            );
+        };
+
+        updateSlidesPerView();
+        window.addEventListener('resize', updateSlidesPerView);
+    </script>
+    <script>
+        if (window.location.pathname.includes('/admins/')) {
+            document.querySelectorAll('[data-aos]').forEach(element => {
+                element.setAttribute('data-aos', '');
+            });
+        }
+    </script>
+</body>
+
+</html>
